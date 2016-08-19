@@ -25,16 +25,12 @@
   "bugs": {
     "url": "https://github.com/voicis/nodebb-plugin-sso-battle.net/issues"
   },
-  "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
     "passport-oauth": "~1.0.0"
   },
   "nbbpm": {
     "compatibility": "^1.0.1",
-    "index": false
-  },
-  "devDependencies": {
-    "ts-loader": "^0.8.2"
+    "index": true
   }
 }
