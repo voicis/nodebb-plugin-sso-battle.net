@@ -1,0 +1,33 @@
+{
+	"id": "nodebb-plugin-sso-battle.net",
+	"name": "NodeBB Battle.net OAuth SSO",
+	"description": "NodeBB Plugin that allows users to login/register via Battle.net.",
+	"url": "https://github.com/voicis/nodebb-plugin-sso-battle.net",
+	"library": "./library.js",
+	"templates": "templates",
+	"hooks": [
+		{
+			"hook": "static:app.load",
+			"method": "init"
+		},
+		{
+			"hook": "filter:auth.init",
+			"method": "getStrategy"
+		},
+		{
+			"hook": "filter:auth.list",
+			"method": "getAssociation"
+		},
+		{
+			"hook": "filter:admin.header.build",
+			"method": "addToAdminHeader"
+		},
+		{
+			"hook": "static:user.delete",
+			"method": "deleteUserData"
+		}
+	],
+	"acpScripts": [
+		"static/lib/admin.js"
+	]
+}

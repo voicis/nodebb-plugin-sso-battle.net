@@ -1,0 +1,40 @@
+{
+  "name": "nodebb-plugin-sso-battle.net",
+  "version": "0.9.0",
+  "description": "NodeBB battle.net OAuth SSO",
+  "main": "library.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/voicis/nodebb-plugin-sso-battle.net"
+  },
+  "keywords": [
+    "nodebb",
+    "plugin",
+    "battle.net",
+    "oauth2",
+    "sso",
+    "single sign on",
+    "login",
+    "registration"
+  ],
+  "author": {
+    "name": "Davis Voicescuks",
+    "email": "davis.voicescuks@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/voicis/nodebb-plugin-sso-battle.net/issues"
+  },
+  "readme": "",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "passport-oauth": "~1.0.0"
+  },
+  "nbbpm": {
+    "compatibility": "^1.0.1",
+    "index": false
+  },
+  "devDependencies": {
+    "ts-loader": "^0.8.2"
+  }
+}
