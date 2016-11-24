@@ -143,12 +143,14 @@ BattleNet.getStrategy = function (strategies, callback) {
 				if (err) {
 					return done(err);
 				}
-				// Require collection of email
-				req.session.registration = req.session.registration || {};
-				req.session.registration.uid = user.uid;
-				req.session.registration.bnetId = profile.id;
-				req.session.registration.battletag = profile.battletag;
-				req.session.registration.characters = profile.characters;
+				if (user.isNew) {
+					// Require collection of email
+					req.session.registration = req.session.registration || {};
+					req.session.registration.uid = user.uid;
+					req.session.registration.bnetId = profile.id;
+					req.session.registration.battletag = profile.battletag;
+					req.session.registration.characters = profile.characters;
+				}
 
 				authenticationController.onSuccessfulLogin(req, user.uid);
 				done(null, user);
@@ -205,7 +207,8 @@ BattleNet.login = function (profile, callback) {
 		if (uid !== null) {
 			// Existing User
 			callback(null, {
-				uid: uid
+				uid: uid,
+				isNew: false
 			});
 		} else {
 			// New User
@@ -219,7 +222,8 @@ BattleNet.login = function (profile, callback) {
 
 				BattleNet.updateUserFields(uid, profile);
 				callback(null, {
-					uid: uid
+					uid: uid,
+					isNew: true
 				});
 			});
 		}
