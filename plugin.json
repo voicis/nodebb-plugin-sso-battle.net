@@ -11,6 +11,10 @@
 			"method": "init"
 		},
 		{
+			"hook": "static:user.delete",
+			"method": "deleteUserData"
+		},
+		{
 			"hook": "filter:auth.init",
 			"method": "getStrategy"
 		},
@@ -23,8 +27,8 @@
 			"method": "addToAdminHeader"
 		},
 		{
-			"hook": "static:user.delete",
-			"method": "deleteUserData"
+			"hook": "filter:register.interstitial",
+			"method": "addInterstitial"
 		}
 	],
 	"acpScripts": [
