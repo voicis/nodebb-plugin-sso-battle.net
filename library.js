@@ -3,6 +3,7 @@ var User = module.parent.require("./user"),
 	Groups = module.parent.require("./groups"),
 	meta = module.parent.require("./meta"),
 	db = module.parent.require("../src/database"),
+	utils = module.parent.require("../public/src/utils"),
 	passport = module.parent.require("passport"),
 	fs = module.parent.require("fs"),
 	path = module.parent.require("path"),
@@ -93,9 +94,9 @@ BattleNet.getStrategy = function (strategies, callback) {
 	) {
 		var opts = _getPassportOptions(BattleNet.settings.key, BattleNet.settings.secret, BattleNet.settings.region, BattleNet.settings.domain);
 
-		passportOAuth.Strategy.prototype.userProfile = function(accessToken, done)  {
+		passportOAuth.Strategy.prototype.userProfile = function (accessToken, done) {
 			async.parallel({
-				profile: function(next) {
+				profile: function (next) {
 					this._oauth2.get(_getUserIdRoute(BattleNet.settings.region), accessToken, function (err, body, res) {
 						if (err) { return next(new InternalOAuthError("failed to fetch user profile", err)); }
 
@@ -109,7 +110,7 @@ BattleNet.getStrategy = function (strategies, callback) {
 						}
 					});
 				}.bind(this),
-				characters: function(next) {
+				characters: function (next) {
 					this._oauth2.get(getCharacterUrl(BattleNet.settings.region), accessToken, function (err, body, res) {
 						if (err) { return next(new InternalOAuthError("failed to fetch user characters", err)); }
 
@@ -285,6 +286,59 @@ BattleNet.addInterstitial = (data, next) => {
 	next(null, data);
 };
 
+const userIsValid = (data, next) => {
+	async.parallel({
+		emailValid: (next) => {
+			if (data.email) {
+				next(!utils.isEmailValid(data.email) ? new Error('[[error:invalid-email]]') : null);
+			} else {
+				next();
+			}
+		},
+		userNameValid: (next) => {
+			async.waterfall([
+
+				(next) => {
+					const userslug = utils.slugify(data.username);
+
+					if (data.username.length < meta.config.minimumUsernameLength) {
+						return next(new Error('[[error:username-too-short]]'));
+					}
+
+					if (data.username.length > meta.config.maximumUsernameLength) {
+						return next(new Error('[[error:username-too-long]]'));
+					}
+
+					if (!utils.isUserNameValid(data.username) || !userslug) {
+						return next(new Error('[[error:invalid-username]]'));
+					}
+
+					User.existsBySlug(userslug, next);
+				},
+				(exists, next) => {
+
+					next(exists ? new Error('[[error:username-taken]]') : null);
+				}
+			], next);
+
+		},
+		emailAvailable: (next) => {
+			if (data.email) {
+				User.email.available(data.email, (err, available) => {
+					if (err) {
+						return next(err);
+					}
+					next(!available ? new Error('[[error:email-taken]]') : null);
+				});
+			} else {
+				next();
+			}
+		}
+	}, (err) => {
+		next(err);
+	});
+};
+
 BattleNet.storeAdditionalData = (userData, data, next) => {
 	if (!data.hasOwnProperty('username')) {
 		next(new Error("Missing username."));
@@ -293,6 +347,9 @@ BattleNet.storeAdditionalData = (userData, data, next) => {
 	}
 	async.parallel([
 		(next) => {
+			userIsValid(data, next)
+		},
+		(next) => {
 			User.setUserField(userData.uid, 'username', data.username, next)
 		},
 		(next) => {
@@ -300,21 +357,21 @@ BattleNet.storeAdditionalData = (userData, data, next) => {
 		},
 	], next);
 };
-BattleNet.deleteUserData = function(data, next) {
-		var uid = data.uid;
+BattleNet.deleteUserData = function (data, next) {
+	var uid = data.uid;
 
-		async.waterfall([
-			async.apply(User.getUserField, uid, constants.slug + "Id"),
-			(oAuthIdToDelete, next) => {
-				db.deleteObjectField(constants.slug + "Id:uid", oAuthIdToDelete, next);
-			}
-		], (err) => {
-			if (err) {
-				winston.error('[sso-battle.net] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
-				return next(err);
-			}
-			next(null, uid);
-		});
-	};
+	async.waterfall([
+		async.apply(User.getUserField, uid, constants.slug + "Id"),
+		(oAuthIdToDelete, next) => {
+			db.deleteObjectField(constants.slug + "Id:uid", oAuthIdToDelete, next);
+		}
+	], (err) => {
+		if (err) {
+			winston.error('[sso-battle.net] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
+			return next(err);
+		}
+		next(null, uid);
+	});
+};
 
 module.exports = BattleNet;
