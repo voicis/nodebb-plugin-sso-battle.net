@@ -5,6 +5,12 @@
 	"url": "https://github.com/voicis/nodebb-plugin-sso-battle.net",
 	"library": "./library.js",
 	"templates": "templates",
+	"staticDirs": {
+		"images": "public/images"
+	},
+	"less": [
+		"assets/main.less"
+	],
 	"hooks": [
 		{
 			"hook": "static:app.load",
