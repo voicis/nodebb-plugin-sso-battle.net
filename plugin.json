@@ -29,6 +29,10 @@
 		{
 			"hook": "filter:register.interstitial",
 			"method": "addInterstitial"
+		},
+		{
+			"hook": "static:user.delete",
+			"method": "deleteUserData"
 		}
 	],
 	"acpScripts": [

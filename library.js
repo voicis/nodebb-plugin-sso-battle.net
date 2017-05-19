@@ -113,8 +113,8 @@ BattleNet.getStrategy = function (strategies, callback) {
 					this._oauth2.get(getCharacterUrl(BattleNet.settings.region), accessToken, function (err, body, res) {
 						if (err) { return next(new InternalOAuthError("failed to fetch user characters", err)); }
 
-						var json = JSON.parse(body); 
-						next(null, json); 
+						var json = JSON.parse(body);
+						next(null, json);
 					});
 				}.bind(this),
 			}, (err, data) => {
@@ -300,6 +300,21 @@ BattleNet.storeAdditionalData = (userData, data, next) => {
 		},
 	], next);
 };
+BattleNet.deleteUserData = function(data, next) {
+		var uid = data.uid;
 
+		async.waterfall([
+			async.apply(User.getUserField, uid, constants.slug + "Id"),
+			(oAuthIdToDelete, next) => {
+				db.deleteObjectField(constants.slug + "Id:uid", oAuthIdToDelete, next);
+			}
+		], (err) => {
+			if (err) {
+				winston.error('[sso-battle.net] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
+				return next(err);
+			}
+			next(null, uid);
+		});
+	};
 
 module.exports = BattleNet;
