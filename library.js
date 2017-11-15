@@ -10,6 +10,7 @@ var User = module.parent.require("./user"),
 	nconf = module.parent.require("nconf"),
 	winston = module.parent.require("winston"),
 	passportOAuth = require("passport-oauth2"),
+	InternalOAuthError = require("passport-oauth2").InternalOAuthError,
 	async = module.parent.require("async");
 
 var authenticationController = module.parent.require("./controllers/authentication");
