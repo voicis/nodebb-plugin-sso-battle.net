@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-sso-battle.net",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "NodeBB battle.net OAuth SSO",
   "main": "library.js",
   "repository": {
@@ -32,8 +32,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
-    "es6-promise": "^3.0.2",
-    "phantomjs-polyfill": "0.0.1"
+    "es6-promise": "^3.0.2"
   },
   "nbbpm": {
     "compatibility": "^1.0.1",
