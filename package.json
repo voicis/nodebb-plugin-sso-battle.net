@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-sso-battle.net",
-  "version": "0.9.4",
+  "version": "0.9.6",
   "description": "NodeBB battle.net OAuth SSO",
   "main": "library.js",
   "repository": {

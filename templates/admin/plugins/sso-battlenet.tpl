@@ -5,7 +5,7 @@
 			<div class="panel-body">
 				<p>
 					Create a <strong>Battle.net Application</strong> via the
-					<a href="https://dev.battle.net">battle.net Developers Page</a> and then paste your application details here.
+					<a href="https://develop.battle.net">battle.net Developers Page</a> and then paste your application details here.
 				</p>
 				<form role="form" class="sso-battlenet-settings">
 					<div class="form-group">
@@ -17,15 +17,15 @@
 						<input type="text" id="secret" name="secret" title="Secret" class="form-control" placeholder="Secret">
 					</div>
 					<label>Region</label>
-					<select class="form-control" name="region">					
+					<select class="form-control" name="region">
 						<option value="us">US</option>
 						<option value="eu">EU</option>
 						<option value="kr">KR</option>
 						<option value="tw">TW</option>
-						<option value="cn">CN</option>				
+						<option value="cn">CN</option>
 					</select>
 					<div class="form-group">
-						<label for="domain">Callback URL, this has to match to the URL you entered in <a href="https://dev.battle.net">https://dev.battle.net</a></label>
+						<label for="domain">Callback URL, this has to match to the URL you entered in <a href="https://develop.battle.net">https://develop.battle.net</a></label>
 						<div class="input-group">
 							<input type="text" id="domain" name="domain" title="Callback URL" class="form-control" placeholder="https://forum.example.org">
 							<div class="input-group-addon">/auth/battlenet/callback</div>
